@@ -18,7 +18,7 @@ const AllUsers = () => {
     if (!token) return;
 
     axios
-      .get("http://localhost:5000/api/profile", {
+      .get("https://bp-prediction-backend.onrender.com/api/profile", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setAdmin(res.data))
