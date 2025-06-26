@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer utilities {
+    .bg-primary {
+        /* background-color: #2BC0E4 !important; */
+        background-color: #4ED7F1 !important;
+        /* background-color: #2D4F2B !important; */
+        /* background-color: #007074 !important; */
+        /* background-color: #347433 !important; */
+        /* background-color: #578FCA !important; */
+    }
+
+    .bg-primary-100 {
+        background-color: #E0FAFD !important;
+    }
+
+    .bg-primary-200 {
+        background-color: #B9F1FA !important;
+    }
+
+    .bg-primary-300 {
+        background-color: #92E8F8 !important;
+    }
+
+    .bg-primary-400 {
+        background-color: #6BDEF5 !important;
+    }
+
+    .bg-primary-500 {
+        background-color: #4ED7F1 !important;
+    }
+
+    .bg-primary-600 {
+        background-color: #36C3DC !important;
+    }
+
+    .bg-primary-700 {
+        background-color: #1F9FB5 !important;
+    }
+
+    .bg-primary-800 {
+        background-color: #157B8F !important;
+    }
+
+    .bg-primary-900 {
+        background-color: #0A586A !important;
+    }
+
+    .hover\:bg-primary-100 {
+        background-color: #E0FAFD !important;
+    }
+
+    .hover\:bg-primary-200 {
+        background-color: #B9F1FA !important;
+    }
+
+    .hover\:bg-primary-300 {
+        background-color: #92E8F8 !important;
+    }
+
+    .hover\:bg-primary-400 {
+        background-color: #6BDEF5 !important;
+    }
+
+    .hover\:bg-primary-500 {
+        background-color: #4ED7F1 !important;
+    }
+
+    .hover\:bg-primary-600 {
+        background-color: #11adc9 !important;
+    }
+
+    .hover\:bg-primary-700 {
+        background-color: #1F9FB5 !important;
+    }
+
+    .hover\:bg-primary-800 {
+        background-color: #157B8F !important;
+    }
+
+    .hover\:bg-primary-900 {
+        background-color: #0A586A !important;
+    }
+
+
+
+    .text-primary {
+        color: #4ED7F1 !important;
+    }
+
+    .border-primary {
+        border-color: #4ED7F1 !important;
+    }
+
+    /* 🔵 Hover variants */
+    .hover\:bg-primary:hover {
+        background-color: #1b7e92 !important;
+    }
+
+    .hover\:text-primary:hover {
+        color: #4ED7F1 !important;
+    }
+
+    .hover\:border-primary:hover {
+        border-color: #4ED7F1 !important;
+    }
+}
+
+
+@layer base {
+    html {
+        font-family: 'DM Sans', sans-serif;
+    }
+}
