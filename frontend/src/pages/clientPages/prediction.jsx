@@ -100,7 +100,7 @@ const PredictionForm = () => {
             const token = localStorage.getItem("token");
             if (!token) throw new Error("No token found. Please login.");
 
-            const recRes = await fetch("http://localhost:5000/api/recommendation", {
+            const recRes = await fetch("https://bp-prediction-backend.onrender.com/api/recommendation", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
