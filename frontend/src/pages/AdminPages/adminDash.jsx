@@ -36,7 +36,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    axios.get("http://localhost:5000/api/profile", {
+    axios.get("https://bp-prediction-backend.onrender.com/api/profile", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => setAdmin(res.data))
@@ -46,13 +46,13 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userRes = await axios.get("http://localhost:5000/api/total-users");
+        const userRes = await axios.get("https://bp-prediction-backend.onrender.com/api/total-users");
         setUserCount(userRes.data.total);
 
-        const predictionRes = await axios.get("http://localhost:5000/api/total-predictions");
+        const predictionRes = await axios.get("https://bp-prediction-backend.onrender.com/api/total-predictions");
         setPredictions(predictionRes.data.t_prediction);
 
-        const classifiedRes = await axios.get("http://localhost:5000/api/classified-predictions");
+        const classifiedRes = await axios.get("https://bp-prediction-backend.onrender.com/api/classified-predictions");
         setData(classifiedRes.data);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
               <div className="text-xs text-gray-500 dark:text-gray-300">Admin</div>
             </div>
             <img
-              src={`http://localhost:5000/uploads/${admin.profilePicture || "default.png"}`}
+              src={`https://bp-prediction-backend.onrender.com/uploads/${admin.profilePicture || "default.png"}`}
               alt="Admin"
               className="w-10 h-10 rounded-full object-cover border"
             />
