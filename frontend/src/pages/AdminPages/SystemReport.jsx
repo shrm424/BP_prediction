@@ -86,9 +86,9 @@ const AdminSystemReport = () => {
         const fetchData = async () => {
             try {
                 const [overviewRes, dailyRes, monthlyRes] = await Promise.all([
-                    axios.get("http://localhost:5000/api/report/overview"),
-                    axios.get("http://localhost:5000/api/report/predictions/daily"),
-                    axios.get("http://localhost:5000/api/report/predictions/monthly"),
+                    axios.get("https://bp-prediction-backend.onrender.com/api/report/overview"),
+                    axios.get("https://bp-prediction-backend.onrender.com/api/report/predictions/daily"),
+                    axios.get("https://bp-prediction-backend.onrender.com/api/report/predictions/monthly"),
                 ]);
 
                 setOverview(overviewRes.data);
@@ -106,7 +106,7 @@ const AdminSystemReport = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        axios.get("http://localhost:5000/api/profile", {
+        axios.get("https://bp-prediction-backend.onrender.com/api/profile", {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then((res) => setAdmin(res.data))
@@ -168,7 +168,7 @@ const AdminSystemReport = () => {
                             <div className="text-xs text-gray-500 dark:text-gray-300">Admin</div>
                         </div>
                         <img
-                            src={`http://localhost:5000/uploads/${admin.profilePicture || "default.png"}`}
+                            src={`https://bp-prediction-backend.onrender.com/uploads/${admin.profilePicture || "default.png"}`}
                             alt="Admin"
                             className="w-10 h-10 rounded-full object-cover border"
                         />
