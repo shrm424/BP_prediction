@@ -30,7 +30,7 @@ const DashboardDescription = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await axios.get("http://localhost:5000/api/predictions/stats");
+                const res = await axios.get("https://bp-prediction-backend.onrender.com/api/predictions/stats");
                 setDataStats(res.data);
             } catch (err) {
                 console.error("Failed to fetch stats", err);
@@ -40,7 +40,7 @@ const DashboardDescription = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/hypertension/all").then((res) => {
+        axios.get("https://bp-prediction-backend.onrender.com/api/hypertension/all").then((res) => {
             setData(res.data);
         });
     }, []);
@@ -48,7 +48,7 @@ const DashboardDescription = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) return;
-        axios.get("http://localhost:5000/api/profile", {
+        axios.get("https://bp-prediction-backend.onrender.com/api/profile", {
             headers: { Authorization: `Bearer ${token}` },
         }).then((res) => setAdmin(res.data))
             .catch((err) => console.error("Error loading profile", err));
