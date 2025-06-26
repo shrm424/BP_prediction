@@ -28,7 +28,7 @@ const TargetDistributionByRisk = () => {
   ];
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/hypertension/all")
+    axios.get("https://bp-prediction-backend.onrender.com/api/hypertension/all")
       .then((res) => setData(res.data))
       .catch((err) => console.error('Error fetching data:', err));
   }, []);
@@ -229,7 +229,7 @@ const GroupedSummary = () => {
 
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/hypertension/all")
+    axios.get("https://bp-prediction-backend.onrender.com/api/hypertension/all")
       .then((res) => {
         setData(res.data);
         setAnalysisOptions([
@@ -443,7 +443,7 @@ const DatasetVisualizer = () => {
   const numericColumns = ["age", "cigsPerDay", "sysBP", "diaBP", "BMI", "glucose", "totChol", "heartRate"];
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/hypertension/all").then((res) => {
+    axios.get("https://bp-prediction-backend.onrender.com/api/hypertension/all").then((res) => {
       setData(res.data);
       setColumns(Object.keys(res.data[0] || {}));
     });
@@ -452,7 +452,7 @@ const DatasetVisualizer = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    axios.get("http://localhost:5000/api/profile", {
+    axios.get("https://bp-prediction-backend.onrender.com/api/profile", {
       headers: { Authorization: `Bearer ${token}` },
     }).then((res) => setAdmin(res.data))
       .catch((err) => console.error("Error loading profile", err));
@@ -628,7 +628,7 @@ const DatasetVisualizer = () => {
               <div className="text-xs text-neutral-500 dark:text-neutral-300">Admin</div>
             </div>
             <img
-              src={`http://localhost:5000/uploads/${admin.profilePicture || "default.png"}`}
+              src={`https://bp-prediction-backend.onrender.com/uploads/${admin.profilePicture || "default.png"}`}
               alt="Admin"
               className="w-10 h-10 rounded-full object-cover border"
             />
