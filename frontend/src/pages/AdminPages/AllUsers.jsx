@@ -29,7 +29,7 @@ const AllUsers = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/users", {
+        const res = await axios.get("https://bp-prediction-backend.onrender.com/api/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);
@@ -61,7 +61,7 @@ const AllUsers = () => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+      await axios.delete(`https://bp-prediction-backend.onrender.com/api/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers((prev) => prev.filter((u) => u._id !== userId));
@@ -76,7 +76,7 @@ const AllUsers = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/users/${selectedUser._id}`,
+        `https://bp-prediction-backend.onrender.com/api/users/${selectedUser._id}`,
         selectedUser,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -84,7 +84,7 @@ const AllUsers = () => {
       );
       alert("User updated");
       setShowModal(false);
-      const res = await axios.get("http://localhost:5000/api/users", {
+      const res = await axios.get("https://bp-prediction-backend.onrender.com/api/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data);
