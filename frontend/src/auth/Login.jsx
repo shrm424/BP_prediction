@@ -15,7 +15,7 @@ const Login = () => {
     setMessage({ text: "", type: "" });
 
     try {
-      const res = await fetch(`http://localhost:5000/api/login-otp/login-otp`, {
+      const res = await fetch(`https://bp-prediction-backend.onrender.com/api/login-otp/login-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -42,7 +42,7 @@ const Login = () => {
     const password = localStorage.getItem("pendingPassword");
 
     try {
-      const res = await fetch(`http://localhost:5000/api/login-otp/verify-login-otp`, {
+      const res = await fetch(`https://bp-prediction-backend.onrender.com/api/login-otp/verify-login-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, otp }),
