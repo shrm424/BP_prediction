@@ -26,7 +26,7 @@ const profile = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:5000/api/profile", {
+            .get("https://bp-prediction-backend.onrender.com/api/profile", {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => {
@@ -48,7 +48,7 @@ const profile = () => {
     const handleSave = () => {
         if (formData.email !== user.email) {
             axios
-                .post("http://localhost:5000/api/profileUpdate/request-update-otp", {
+                .post("https://bp-prediction-backend.onrender.com/api/profileUpdate/request-update-otp", {
                     email: formData.email,
                     updates: {
                         username: formData.username,
@@ -69,7 +69,7 @@ const profile = () => {
 
     const handleOTPVerify = () => {
         axios
-            .post("http://localhost:5000/api/profileUpdate/verify-update-otp", { otp }, {
+            .post("https://bp-prediction-backend.onrender.com/api/profileUpdate/verify-update-otp", { otp }, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then(() => {
@@ -89,7 +89,7 @@ const profile = () => {
         }
 
         axios
-            .put("http://localhost:5000/api/profileUpdate/update", payload, {
+            .put("https://bp-prediction-backend.onrender.com/api/profileUpdate/update", payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
@@ -116,7 +116,7 @@ const profile = () => {
                         src={
                             formData.profilePicture instanceof File
                                 ? URL.createObjectURL(formData.profilePicture)
-                                : `http://localhost:5000/uploads/${user.profilePicture}`
+                                : `https://bp-prediction-backend.onrender.com/uploads/${user.profilePicture}`
                         }
                         alt="Profile"
                         className="w-full h-full object-cover"
