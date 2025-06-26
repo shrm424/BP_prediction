@@ -11,7 +11,7 @@ const Recommendation = () => {
   useEffect(() => {
     const fetchPrediction = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/recommendation/${id}`);
+        const res = await fetch(`https://bp-prediction-backend.onrender.com/api/recommendation/${id}`);
         if (!res.ok) throw new Error("Failed to fetch prediction");
         const data = await res.json();
         setPrediction(data);
