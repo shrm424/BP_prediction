@@ -11,7 +11,7 @@ import {
     Tooltip,
     Legend
 } from "chart.js";
-import ChartDataLabels from 'chartjs-plugin-datalabels'; // Corrected import
+import ChartDataLabels from 'chartjs-plugin-datalabels'; 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
@@ -28,7 +28,7 @@ export default function SystemChart() {
 
     const fetchChartData = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/api/predictions/stats");
+            const res = await axios.get("https://bp-prediction-backend.onrender.com/api/predictions/stats");
             const data = res.data;
 
             const preparedCharts = [
@@ -69,7 +69,7 @@ export default function SystemChart() {
         if (!token) return;
 
         axios
-            .get("http://localhost:5000/api/profile", {
+            .get("https://bp-prediction-backend.onrender.com/api/profile", {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => setAdmin(res.data))
@@ -105,7 +105,7 @@ export default function SystemChart() {
                             <div className="text-xs text-gray-500 dark:text-gray-300">Admin</div>
                         </div>
                         <img
-                            src={`http://localhost:5000/uploads/${admin.profilePicture || "default.png"}`}
+                            src={`https://bp-prediction-backend.onrender.com/uploads/${admin.profilePicture || "default.png"}`}
                             alt="Admin"
                             className="w-10 h-10 rounded-full object-cover border"
                         />
