@@ -7,7 +7,7 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     flexRender,
-} from "@tanstack/react-table"; // ✅ works in .js/.jsx
+} from "@tanstack/react-table"; 
 
 const HistoryPage = () => {
     const [user, setUser] = useState(null);
@@ -20,7 +20,7 @@ const HistoryPage = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         axios
-            .get("http://localhost:5000/api/profile", {
+            .get("https://bp-prediction-backend.onrender.com/api/profile", {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => {
@@ -32,7 +32,7 @@ const HistoryPage = () => {
 
     const fetchPredictions = (userId) => {
         axios
-            .get(`http://localhost:5000/api/predictions/user/${userId}`)
+            .get(`https://bp-prediction-backend.onrender.com/api/predictions/user/${userId}`)
             .then((res) => setPredictions(res.data))
             .catch((err) => console.error("Error fetching predictions", err));
     };
