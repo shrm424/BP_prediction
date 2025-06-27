@@ -1,0 +1,9 @@
+fastapi
+joblib
+nest_asyncio
+pandas
+pydantic
+tldextract
+uvicorn
+xgboost
+scikit-learn==1.4.2
