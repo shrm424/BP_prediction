@@ -107,6 +107,6 @@ def predict_lgb(data: HealthInput):
     return {"model": "LightGBM", "prediction": prediction, "accuracy": f"{lgb_accuracy*100:.2f}%"}
 
 # ---------------------- Run Server -------------------------- #
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=7000)
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="127.0.0.1", port=7000)
