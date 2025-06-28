@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from typing import Optional
 import pandas as pd
 import joblib
 import xgboost as xgb
 import lightgbm as lgb
 from sklearn.metrics import accuracy_score
+from app.model import BaseModel
 
 # ---------------------- Setup FastAPI ---------------------- #
 app = FastAPI()
@@ -18,23 +18,25 @@ app.add_middleware(
 )
 
 # ---------------------- Load Models ------------------------ #
-svm_model = joblib.load("svm_model_export.joblib")
-rf_model = joblib.load("random_forest_model_export.joblib")
-log_model = joblib.load("logistic_model_export.joblib")
-tree_model = joblib.load("decision_tree_model_export.joblib")
+svm_model = joblib.load("models/svm_model_export.joblib")
+rf_model = joblib.load("models/random_forest_model_export.joblib")
+log_model = joblib.load("models/logistic_model_export.joblib")
+tree_model = joblib.load("models/decision_tree_model_export.joblib")
 
 xgb_model = xgb.XGBClassifier()
-xgb_model.load_model("xgboost_model.json")
+xgb_model.load_model("models/xgboost_model.json")
 
-lgb_model = lgb.Booster(model_file="lightgbm_model.json")
+lgb_model = lgb.Booster(model_file="models/lightgbm_model.json")
 
-# ---------------------- Load Test Data --------------------- #
-test_data = pd.read_csv("cleaned_df.csv")
-if "Unnamed: 0" in test_data.columns:
-    test_data.drop(columns=["Unnamed: 0"], inplace=True)
 
-X_test = test_data.drop("Risk", axis=1)
-y_test = test_data["Risk"]
+# ---------------------- Load Test Data ---------------------- #
+def load_test_data(path_name):
+    data = pd.read_csv(path_name)
+    data = data.drop(columns=["Unnamed: 0"])
+    return data
+
+X_test = load_test_data("dataset/X_test.csv")
+y_test = load_test_data("dataset/y_test.csv").values.ravel()  # Ensure 1D array for accuracy_score
 
 # ---------------------- Accuracy Scores --------------------- #
 svm_accuracy = accuracy_score(y_test, svm_model.predict(X_test))
@@ -43,6 +45,7 @@ log_accuracy = accuracy_score(y_test, log_model.predict(X_test))
 tree_accuracy = accuracy_score(y_test, tree_model.predict(X_test))
 xgb_accuracy = accuracy_score(y_test, xgb_model.predict(X_test))
 
+# LightGBM needs .values if X_test is a DataFrame
 lgb_predictions = lgb_model.predict(X_test.values)
 lgb_predictions_binary = [1 if p >= 0.5 else 0 for p in lgb_predictions]
 lgb_accuracy = accuracy_score(y_test, lgb_predictions_binary)
