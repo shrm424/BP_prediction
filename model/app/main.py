@@ -10,7 +10,7 @@ from app.model import HealthInput
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[""https://bp-prediction-frontend.onrender.com"],
     allow_methods=["POST"],
     allow_headers=["*"],
 )
