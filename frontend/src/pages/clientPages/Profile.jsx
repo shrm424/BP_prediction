@@ -148,30 +148,33 @@ const profile = () => {
             </div>
 
             {/* Logout */}
-            <div className="mt-8 max-w-5xl mx-auto">
-                {user.role === "admin" && (
-                    <button
-                        onClick={handleAdmin}
-                        className="w-full bg-blue-600 text-white py-2 rounded-xl mb-4 hover:bg-blue-700 font-semibold transition"
-                    >
-                        Go to Admin Panel
-                    </button>
-                )}
+            <div className="mt-10 max-w-5xl mx-auto px-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {user.role === "admin" && (
+            <button
+                onClick={handleAdmin}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
+            >
+                Admin Panel
+            </button>
+        )}
 
-                <button
-                    onClick={handleReset}
-                    className="w-full bg-primary hover:bg-primary text-white py-2 rounded-xl shadow hover:shadow-md transition"
-                >
-                    Change Password
-                </button>
+        <button
+            onClick={handleReset}
+            className="bg-amber-600 hover:bg-amber-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
+        >
+            Change Password
+        </button>
 
-                <button
-                    onClick={handleLogout}
-                    className="w-full bg-red-600 text-white py-3 rounded-xl mt-10 hover:bg-red-700 font-semibold transition"
-                >
-                    Logout
-                </button>
-            </div>
+        <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
+        >
+            Logout
+        </button>
+    </div>
+</div>
+
 
 
             {/* Edit Modal */}
