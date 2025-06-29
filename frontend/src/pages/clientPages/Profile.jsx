@@ -95,7 +95,7 @@ const profile = () => {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then(() => window.location.reload())
+            .then(() => navigate("/profile"))
             .catch((err) => console.error("Update failed", err));
     };
 
