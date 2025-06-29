@@ -89,6 +89,7 @@ const PredictionForm = () => {
             if (!route) throw new Error("Invalid model selected.");
 
             const predictRes = await fetch(`https://bp-prediction-model.onrender.com/predict/${route}`, {
+                console.log(`Sending to: https://bp-prediction-model.onrender.com/predict/${route}`);
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(reqBody),
