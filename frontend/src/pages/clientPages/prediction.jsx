@@ -88,12 +88,29 @@ const PredictionForm = () => {
             const route = modelRouteMap[formData.model];
             if (!route) throw new Error("Invalid model selected.");
 
-            const predictRes = await fetch(`https://bp-prediction-model.onrender.com/predict/${route}`, {
-                console.log(`Sending to: https://bp-prediction-model.onrender.com/predict/${route}`);
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(reqBody),
-            });
+            try {
+    const url = `https://bp-prediction-model.onrender.com/predict/${route}`;
+    console.log(`Sending to: ${url}`);
+
+    const predictRes = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reqBody),
+    });
+
+    if (!predictRes.ok) {
+        throw new Error("Prediction API failed.");
+    }
+
+    const predictionData = await predictRes.json();
+    console.log("Prediction Response:", predictionData);
+
+    // Continue with the rest of your logic...
+} catch (error) {
+    console.error("Prediction Error:", error);
+    showMessage(error.message || "An error occurred.");
+}
+
 
             if (!predictRes.ok) throw new Error("Prediction API failed.");
             const predictionData = await predictRes.json();
