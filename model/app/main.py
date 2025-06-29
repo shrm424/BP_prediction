@@ -26,7 +26,7 @@ tree_model = joblib.load("models/decision_tree_model_export.joblib")
 xgb_model = xgb.XGBClassifier()
 xgb_model.load_model("models/xgboost_model.json")
 
-lgb_model = lgb.Booster(model_file="models/lightgbm_model.txt")
+lgb_model = lgb.Booster(model_file="models/lightgbm_model.json")
 
 # ---------------------- Load Test Data ---------------------- #
 def load_test_data(path_name):
