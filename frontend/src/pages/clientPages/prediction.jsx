@@ -105,15 +105,11 @@ const PredictionForm = () => {
                 const predictionData = await predictRes.json();
                 console.log("Prediction Response:", predictionData);
 
-                // Continue with the rest of your logic...
+                // Continue with the rest of your logic using predictionData...
             } catch (error) {
                 console.error("Prediction Error:", error);
                 showMessage(error.message || "An error occurred.");
             }
-
-
-            if (!predictRes.ok) throw new Error("Prediction API failed.");
-            const predictionData = await predictRes.json();
 
             const token = localStorage.getItem("token");
             if (!token) throw new Error("No token found. Please login.");
