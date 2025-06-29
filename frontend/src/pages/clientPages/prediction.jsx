@@ -53,6 +53,7 @@ const PredictionForm = () => {
         setLoading(true);
         setMessage({ text: "", type: "" });
 
+        // Validate inputs
         const error = validateForm();
         if (error) {
             showMessage(error);
@@ -60,57 +61,68 @@ const PredictionForm = () => {
             return;
         }
 
+        // Prepare input body
+        const reqBody = {
+            male: parseInt(formData.male),
+            age: parseInt(formData.age),
+            currentSmoker: parseInt(formData.currentSmoker),
+            cigsPerDay: parseFloat(formData.cigsPerDay),
+            BPMeds: parseFloat(formData.BPMeds),
+            diabetes: parseInt(formData.diabetes),
+            totChol: parseFloat(formData.totChol),
+            sysBP: parseFloat(formData.sysBP),
+            diaBP: parseFloat(formData.diaBP),
+            BMI: parseFloat(formData.BMI),
+            heartRate: parseFloat(formData.heartRate),
+            glucose: parseFloat(formData.glucose),
+        };
+
+        // Model routes
+        const modelRouteMap = {
+            logistic: "logistic",
+            svm: "svm",
+            rf: "rf",
+            tree: "tree",
+            xgb: "xgb",
+            lgb: "lgb"
+        };
+
+        const route = modelRouteMap[formData.model];
+        if (!route) {
+            showMessage("Invalid model selected.");
+            setLoading(false);
+            return;
+        }
+
+        let predictionData = null;
+
+        // === Fetch prediction ===
         try {
-            const reqBody = {
-                male: parseInt(formData.male),
-                age: parseInt(formData.age),
-                currentSmoker: parseInt(formData.currentSmoker),
-                cigsPerDay: parseFloat(formData.cigsPerDay),
-                BPMeds: parseFloat(formData.BPMeds),
-                diabetes: parseInt(formData.diabetes),
-                totChol: parseFloat(formData.totChol),
-                sysBP: parseFloat(formData.sysBP),
-                diaBP: parseFloat(formData.diaBP),
-                BMI: parseFloat(formData.BMI),
-                heartRate: parseFloat(formData.heartRate),
-                glucose: parseFloat(formData.glucose),
-            };
+            const url = `https://bp-prediction-model.onrender.com/predict/${route}`;
+            console.log(`Sending to: ${url}`);
 
-            const modelRouteMap = {
-                logistic: "logistic",
-                svm: "svm",
-                rf: "rf",
-                tree: "tree",
-                xgb: "xgb",
-                lgb: "lgb"
-            };
+            const predictRes = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reqBody),
+            });
 
-            const route = modelRouteMap[formData.model];
-            if (!route) throw new Error("Invalid model selected.");
-
-            try {
-                const url = `https://bp-prediction-model.onrender.com/predict/${route}`;
-                console.log(`Sending to: ${url}`);
-
-                const predictRes = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(reqBody),
-                });
-
-                if (!predictRes.ok) {
-                    throw new Error("Prediction API failed.");
-                }
-
-                const predictionData = await predictRes.json();
-                console.log("Prediction Response:", predictionData);
-
-                // Continue with the rest of your logic using predictionData...
-            } catch (error) {
-                console.error("Prediction Error:", error);
-                showMessage(error.message || "An error occurred.");
+            if (!predictRes.ok) {
+                throw new Error("Prediction API failed.");
             }
 
+            predictionData = await predictRes.json();
+            console.log("Prediction Response:", predictionData);
+
+        } catch (error) {
+            console.error("Prediction Error:", error);
+            showMessage(error.message || "Prediction failed.");
+            setLoading(false);
+            return;
+        }
+
+        // === Save recommendation ===
+        try {
             const token = localStorage.getItem("token");
             if (!token) throw new Error("No token found. Please login.");
 
@@ -130,16 +142,18 @@ const PredictionForm = () => {
             });
 
             if (!recRes.ok) throw new Error("Recommendation save failed.");
+
             const { data } = await recRes.json();
             showMessage("Prediction saved successfully!", "success");
             navigate(`/recommendation/${data.id}`);
         } catch (error) {
-            console.error(error);
-            showMessage(error.message || "An error occurred.");
+            console.error("Recommendation Save Error:", error);
+            showMessage(error.message || "Saving recommendation failed.");
         } finally {
             setLoading(false);
         }
     };
+
 
     const numberInputProps = {
         step: "0.1",
