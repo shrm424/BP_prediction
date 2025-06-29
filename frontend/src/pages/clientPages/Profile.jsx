@@ -96,8 +96,8 @@ const profile = () => {
                 },
             })
             .then(() => {
-                setIsEditing(false);      
-                setIsVerifying(false);    
+                setIsEditing(false);
+                setIsVerifying(false);
             })
             .catch((err) => console.error("Update failed", err));
     };
@@ -149,31 +149,31 @@ const profile = () => {
 
             {/* Logout */}
             <div className="mt-10 max-w-5xl mx-auto px-4">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {user.role === "admin" && (
-            <button
-                onClick={handleAdmin}
-                className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
-            >
-                Admin Panel
-            </button>
-        )}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {user.role === "admin" && (
+                        <button
+                            onClick={handleAdmin}
+                            className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
+                        >
+                            Admin Panel
+                        </button>
+                    )}
 
-        <button
-            onClick={handleReset}
-            className="bg-amber-600 hover:bg-amber-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
-        >
-            Change Password
-        </button>
+                    <button
+                        onClick={handleReset}
+                        className="bg-amber-600 hover:bg-amber-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
+                    >
+                        Change Password
+                    </button>
 
-        <button
-            onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
-        >
-            Logout
-        </button>
-    </div>
-</div>
+                    <button
+                        onClick={handleLogout}
+                        className="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold shadow transition"
+                    >
+                        Logout
+                    </button>
+                </div>
+            </div>
 
 
 
