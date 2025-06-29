@@ -99,12 +99,19 @@ const profile = () => {
             .catch((err) => console.error("Update failed", err));
     };
 
+    // const handleLogout = () => {
+    //     localStorage.removeItem("token");
+    //     window.location.href = "/login";
+    // };
+
+    // const handleReset = () => { window.location.href = "/request-reset"; }
+
     const handleLogout = () => {
         localStorage.removeItem("token");
-        window.location.href = "/login";
+        navigate("/login");
     };
 
-    const handleReset = () => { window.location.href = "/request-reset"; }
+    const handleReset = () => navigate("/request-reset");
 
     if (!user) return <div className="text-center py-10 text-gray-600 dark:text-gray-300">Loading...</div>;
 
