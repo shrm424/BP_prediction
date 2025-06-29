@@ -112,6 +112,7 @@ const profile = () => {
     };
 
     const handleReset = () => navigate("/request-reset");
+    const handleAdmin = () => navigate("/admin");
 
     if (!user) return <div className="text-center py-10 text-gray-600 dark:text-gray-300">Loading...</div>;
 
@@ -147,7 +148,7 @@ const profile = () => {
             <div className="mt-8 max-w-5xl mx-auto">
                 {user.role === "admin" && (
                     <button
-                        onClick={() => window.location.href = "/admin"}
+                        onClick={handleAdmin}
                         className="w-full bg-blue-600 text-white py-2 rounded-xl mb-4 hover:bg-blue-700 font-semibold transition"
                     >
                         Go to Admin Panel
