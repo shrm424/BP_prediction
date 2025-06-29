@@ -15,7 +15,7 @@ const AdminProfile = () => {
     const [tempUpdateData, setTempUpdateData] = useState({});
     const [otpMessage, setOtpMessage] = useState("");
 
-    useEffect(() => {
+    const fetchAdminProfile = () => {
         const token = localStorage.getItem("token");
         if (!token) return;
         axios.get("https://bp-prediction-backend.onrender.com/api/profile", {
@@ -26,6 +26,10 @@ const AdminProfile = () => {
                 setFormData(res.data);
             })
             .catch((err) => console.error("Error loading profile", err));
+    };
+
+    useEffect(() => {
+        fetchAdminProfile();
     }, []);
 
     const toggleDarkMode = () => {
@@ -73,9 +77,8 @@ const AdminProfile = () => {
                 "Content-Type": "multipart/form-data",
             },
         })
-            .then((res) => {
-                setAdmin(res.data);
-                setFormData(res.data);
+            .then(() => {
+                fetchAdminProfile(); // Refresh profile after update
                 setSelectedFile(null);
                 setOtpModal(false);
                 alert("✅ Profile updated!");
@@ -114,7 +117,9 @@ const AdminProfile = () => {
                         onClick={toggleDarkMode}
                         className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-neutral-700 dark:hover:bg-gray-600"
                         title="Toggle Theme"
-                    >{darkMode ? <Sun className="text-yellow-400 w-6 h-6" /> : <Moon className="text-gray-800 dark:text-white w-6 h-6" />}</button>
+                    >
+                        {darkMode ? <Sun className="text-yellow-400 w-6 h-6" /> : <Moon className="text-gray-800 dark:text-white w-6 h-6" />}
+                    </button>
                     <div className="flex items-center border border-primary rounded-full px-2 py-1">
                         <div className="mr-4 text-sm">
                             <div className="text-sm font-bold">{admin.username?.split(" ")[0]}</div>
@@ -148,7 +153,6 @@ const AdminProfile = () => {
                         <button onClick={handleLogout} className="bg-red-700 text-white py-2 rounded-xl shadow hover:scale-105">Logout</button>
                     </div>
                 </div>
-
             </main>
 
             {showEditModal && (
