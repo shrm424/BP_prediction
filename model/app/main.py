@@ -1,13 +1,11 @@
+import joblib
+import lightgbm as lgb
+import pandas as pd
+import xgboost as xgb
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional
-import pandas as pd
-import joblib
-import xgboost as xgb
-import lightgbm as lgb
 from sklearn.metrics import accuracy_score
-from app.model import BaseModel
-
+from app.model import HealthInput
 # ---------------------- Setup FastAPI ---------------------- #
 app = FastAPI()
 app.add_middleware(
@@ -26,7 +24,7 @@ tree_model = joblib.load("models/decision_tree_model_export.joblib")
 xgb_model = xgb.XGBClassifier()
 xgb_model.load_model("models/xgboost_model.json")
 
-lgb_model = lgb.Booster(model_file="models/lightgbm_model.json")
+# lgb_model = lgb.Booster(model_file="models/lightgbm_model.json")
 
 
 # ---------------------- Load Test Data ---------------------- #
@@ -35,8 +33,8 @@ def load_test_data(path_name):
     data = data.drop(columns=["Unnamed: 0"])
     return data
 
-X_test = load_test_data("dataset/X_test.csv")
-y_test = load_test_data("dataset/y_test.csv").values.ravel()  # Ensure 1D array for accuracy_score
+X_test = load_test_data("datasets/X_test.csv")
+y_test = load_test_data("datasets/y_test.csv").values.ravel()  # Ensure 1D array for accuracy_score
 
 # ---------------------- Accuracy Scores --------------------- #
 svm_accuracy = accuracy_score(y_test, svm_model.predict(X_test))
@@ -46,24 +44,9 @@ tree_accuracy = accuracy_score(y_test, tree_model.predict(X_test))
 xgb_accuracy = accuracy_score(y_test, xgb_model.predict(X_test))
 
 # LightGBM needs .values if X_test is a DataFrame
-lgb_predictions = lgb_model.predict(X_test.values)
-lgb_predictions_binary = [1 if p >= 0.5 else 0 for p in lgb_predictions]
-lgb_accuracy = accuracy_score(y_test, lgb_predictions_binary)
-
-# ---------------------- Input Schema ------------------------ #
-class HealthInput(BaseModel):
-    male: int
-    age: int
-    currentSmoker: int
-    cigsPerDay: float
-    BPMeds: float
-    diabetes: int
-    totChol: float
-    sysBP: float
-    diaBP: float
-    BMI: float
-    heartRate: float
-    glucose: float
+# lgb_predictions = lgb_model.predict(X_test.values)
+# lgb_predictions_binary = [1 if p >= 0.5 else 0 for p in lgb_predictions]
+# lgb_accuracy = accuracy_score(y_test, lgb_predictions_binary)
 
 # ---------------------- Prediction Helper ------------------- #
 def predict_model(model, input_df, model_type="sklearn"):
@@ -73,6 +56,11 @@ def predict_model(model, input_df, model_type="sklearn"):
         return int(model.predict(input_df)[0])
 
 # ---------------------- API Endpoints ----------------------- #
+
+@app.get("/")
+def root():
+    return {"message": "Welcome to Health Prediction API"}
+
 @app.post("/predict/svm")
 def predict_svm(data: HealthInput):
     input_df = pd.DataFrame([data.dict()])
@@ -103,13 +91,8 @@ def predict_xgb(data: HealthInput):
     prediction = predict_model(xgb_model, input_df)
     return {"model": "XGBoost", "prediction": prediction, "accuracy": f"{xgb_accuracy*100:.2f}%"}
 
-@app.post("/predict/lgb")
-def predict_lgb(data: HealthInput):
-    input_df = pd.DataFrame([data.dict()])
-    prediction = predict_model(lgb_model, input_df, model_type="lightgbm")
-    return {"model": "LightGBM", "prediction": prediction, "accuracy": f"{lgb_accuracy*100:.2f}%"}
-
-# ---------------------- Run Server -------------------------- #
-# if __name__ == "__main__":
-#     import uvicorn
-#     uvicorn.run(app, host="127.0.0.1", port=7000)
+# @app.post("/predict/lgb")
+# def predict_lgb(data: HealthInput):
+#     input_df = pd.DataFrame([data.dict()])
+#     prediction = predict_model(lgb_model, input_df, model_type="lightgbm")
+#     return {"model": "LightGBM", "prediction": prediction, "accuracy": f"{lgb_accuracy*100:.2f}%"}
