@@ -95,7 +95,10 @@ const profile = () => {
                     "Content-Type": "multipart/form-data",
                 },
             })
-            .then(() => navigate("/profile"))
+            .then(() => {
+                setIsEditing(false);      
+                setIsVerifying(false);    
+            })
             .catch((err) => console.error("Update failed", err));
     };
 
