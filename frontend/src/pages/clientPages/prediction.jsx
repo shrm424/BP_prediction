@@ -49,110 +49,113 @@ const PredictionForm = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setMessage({ text: "", type: "" });
+    e.preventDefault();
+    setLoading(true);
+    setMessage({ text: "", type: "" });
 
-        // Validate inputs
-        const error = validateForm();
-        if (error) {
-            showMessage(error);
-            setLoading(false);
-            return;
-        }
+    // Validate form input
+    const error = validateForm();
+    if (error) {
+        showMessage(error);
+        setLoading(false);
+        return;
+    }
 
-        // Prepare input body
-        const reqBody = {
-            male: parseInt(formData.male),
-            age: parseInt(formData.age),
-            currentSmoker: parseInt(formData.currentSmoker),
-            cigsPerDay: parseFloat(formData.cigsPerDay),
-            BPMeds: parseFloat(formData.BPMeds),
-            diabetes: parseInt(formData.diabetes),
-            totChol: parseFloat(formData.totChol),
-            sysBP: parseFloat(formData.sysBP),
-            diaBP: parseFloat(formData.diaBP),
-            BMI: parseFloat(formData.BMI),
-            heartRate: parseFloat(formData.heartRate),
-            glucose: parseFloat(formData.glucose),
-        };
-
-        // Model routes
-        const modelRouteMap = {
-            logistic: "logistic",
-            svm: "svm",
-            rf: "rf",
-            tree: "tree",
-            xgb: "xgb",
-            lgb: "lgb"
-        };
-
-        const route = modelRouteMap[formData.model];
-        if (!route) {
-            showMessage("Invalid model selected.");
-            setLoading(false);
-            return;
-        }
-
-        let predictionData = null;
-
-        // === Fetch prediction ===
-        try {
-            const url = `https://bp-prediction-model.onrender.com/predict/${route}`;
-            console.log(`Sending to: ${url}`);
-
-            const predictRes = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(reqBody),
-            });
-
-            if (!predictRes.ok) {
-                throw new Error("Prediction API failed.");
-            }
-
-            predictionData = await predictRes.json();
-            console.log("Prediction Response:", predictionData);
-
-        } catch (error) {
-            console.error("Prediction Error:", error);
-            showMessage(error.message || "Prediction failed.");
-            setLoading(false);
-            return;
-        }
-
-        // === Save recommendation ===
-        try {
-            const token = localStorage.getItem("token");
-            if (!token) throw new Error("No token found. Please login.");
-
-            const recRes = await fetch("https://bp-prediction-backend.onrender.com/api/recommendation", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    ...predictionData.data,
-                    prediction: predictionData.prediction,
-                    model: predictionData.model,
-                    accuracy: predictionData.accuracy,
-                    ...reqBody
-                })
-            });
-
-            if (!recRes.ok) throw new Error("Recommendation save failed.");
-
-            const { data } = await recRes.json();
-            showMessage("Prediction saved successfully!", "success");
-            navigate(`/recommendation/${data.id}`);
-        } catch (error) {
-            console.error("Recommendation Save Error:", error);
-            showMessage(error.message || "Saving recommendation failed.");
-        } finally {
-            setLoading(false);
-        }
+    // Prepare request body
+    const reqBody = {
+        male: parseInt(formData.male),
+        age: parseInt(formData.age),
+        currentSmoker: parseInt(formData.currentSmoker),
+        cigsPerDay: parseFloat(formData.cigsPerDay),
+        BPMeds: parseFloat(formData.BPMeds),
+        diabetes: parseInt(formData.diabetes),
+        totChol: parseFloat(formData.totChol),
+        sysBP: parseFloat(formData.sysBP),
+        diaBP: parseFloat(formData.diaBP),
+        BMI: parseFloat(formData.BMI),
+        heartRate: parseFloat(formData.heartRate),
+        glucose: parseFloat(formData.glucose),
     };
+
+    const modelRouteMap = {
+        logistic: "logistic",
+        svm: "svm",
+        rf: "rf",
+        tree: "tree",
+        xgb: "xgb",
+        lgb: "lgb"
+    };
+
+    const route = modelRouteMap[formData.model];
+    if (!route) {
+        showMessage("Invalid model selected.");
+        setLoading(false);
+        return;
+    }
+
+    let predictionData = null;
+
+    // === Predict request ===
+    try {
+        const url = `https://bp-prediction-model.onrender.com/predict/${route}`;
+        console.log(`Sending to: ${url}`);
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(reqBody),
+        });
+
+        if (!response.ok) {
+            throw new Error("Prediction API failed.");
+        }
+
+        predictionData = await response.json();
+        console.log("Prediction Response:", predictionData);
+    } catch (error) {
+        console.error("Prediction Error:", error);
+        showMessage(error.message || "Prediction failed.");
+        setLoading(false);
+        return;
+    }
+
+    // === Save recommendation ===
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("No token found. Please login.");
+        }
+
+        const recRes = await fetch("https://bp-prediction-backend.onrender.com/api/recommendation", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                ...predictionData.data,
+                prediction: predictionData.prediction,
+                model: predictionData.model,
+                accuracy: predictionData.accuracy,
+                ...reqBody,
+            }),
+        });
+
+        if (!recRes.ok) {
+            throw new Error("Recommendation save failed.");
+        }
+
+        const { data } = await recRes.json();
+        showMessage("Prediction saved successfully!", "success");
+        navigate(`/recommendation/${data.id}`);
+    } catch (error) {
+        console.error("Recommendation Save Error:", error);
+        showMessage(error.message || "Saving recommendation failed.");
+    } finally {
+        setLoading(false);
+    }
+};
+
 
 
     const numberInputProps = {
